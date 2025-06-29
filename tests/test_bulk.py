@@ -41,3 +41,22 @@ def test_bulk_tool(monkeypatch):
     results = asyncio.run(call_tool_bulk("search_papers", [{"query": "ai"}]))
     assert len(results) == 1
     assert not results[0].isError
+
+
+def test_bulk_research(monkeypatch):
+    async def fake_run(q):
+        return "Deep result"
+
+    monkeypatch.setattr(
+        "deep_research_mcp.server._run_deep_research",
+        fake_run,
+    )
+
+    results = asyncio.run(
+        call_tool_bulk(
+            "research_summary",
+            [{"question": "AI"}],
+        )
+    )
+    assert len(results) == 1
+    assert not results[0].isError

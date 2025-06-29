@@ -20,10 +20,11 @@ pip install -e .
 ```
 
 ### Configuration
-Set your OpenAI credentials and vector store ID so the server can call the Deep Research API:
+Set your OpenAI credentials and vector store ID so the server can call the Deep Research API. You may also specify ``DEEP_RESEARCH_MODEL`` to override the default model:
 ```bash
 export OPENAI_API_KEY=<your key>
 export VECTOR_STORE_ID=<vector store id>
+export DEEP_RESEARCH_MODEL=o4-mini-deep-research-2025-06-26  # optional
 ```
 
 The server uses the asynchronous OpenAI client under the hood. Ensure the above environment variables are defined before running.
@@ -35,6 +36,9 @@ deep-research-mcp
 ```
 
 The server exposes tools for querying the Deep Research API. See the docstrings in `deep_research_mcp.server` for details.
+
+### Simple API example
+For a minimal script that calls the Deep Research API directly using the OpenAI SDK, see ``examples/deep_research_example.py``.
 
 ### MCP client configuration
 To let your MCP client automatically install and run this server, add the following JSON to your `mcp.json`:

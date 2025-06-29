@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from deep_research_mcp import (
     search_papers,
     get_paper_summary,
+    research_summary,
     categories,
     suggest_reading,
 )
@@ -38,6 +39,15 @@ def test_get_paper_summary(monkeypatch):
 
     result = asyncio.run(get_paper_summary.fn("123"))
     assert "Great paper" in result
+
+
+def test_research_summary(monkeypatch):
+    async def fake_run(q):
+        return "Result about AI"
+
+    monkeypatch.setattr("deep_research_mcp.server._run_deep_research", fake_run)
+    result = asyncio.run(research_summary.fn("AI"))
+    assert "Result" in result
 
 
 def test_resources_and_prompts():
