@@ -25,14 +25,12 @@ pip install -e .
 ```
 
 ### Configuration
-Set your OpenAI credentials and vector store ID so the server can call the Deep Research API. You may also specify `DEEP_RESEARCH_MODEL` to override the default model. `DEEP_RESEARCH_SYSTEM_PROMPT` customizes the system prompt and `DEEP_RESEARCH_TOOLS` controls which tools are sent to the API:
+Set your OpenAI credentials and vector store ID so the server can call the Deep Research API:
 ```bash
 export OPENAI_API_KEY=<your key>
 export VECTOR_STORE_ID=<vector store id>
-export DEEP_RESEARCH_MODEL=o4-mini-deep-research-2025-06-26  # optional
-export DEEP_RESEARCH_SYSTEM_PROMPT="You are an expert researcher"  # optional
-export DEEP_RESEARCH_TOOLS="web_search_preview,code_interpreter"   # optional
 ```
+Optional environment variables `DEEP_RESEARCH_MODEL`, `DEEP_RESEARCH_SYSTEM_PROMPT` and `DEEP_RESEARCH_TOOLS` define defaults for the Deep Research call. You can override them when invoking the `research_summary` tool.
 
 The server uses the asynchronous OpenAI client under the hood. Ensure the above environment variables are defined before running.
 

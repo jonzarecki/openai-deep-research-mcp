@@ -2,15 +2,9 @@ import os
 from openai import OpenAI
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-MODEL = os.environ.get("DEEP_RESEARCH_MODEL", "o4-mini-deep-research-2025-06-26")
-SYSTEM_PROMPT = os.environ.get(
-    "DEEP_RESEARCH_SYSTEM_PROMPT", "You are a helpful research assistant."
-)
-TOOLS = [
-    {"type": name} if name != "code_interpreter" else {"type": "code_interpreter", "container": {"type": "auto", "file_ids": []}}
-    for name in os.environ.get("DEEP_RESEARCH_TOOLS", "web_search_preview").split(",")
-    if name
-]
+MODEL = "o4-mini-deep-research-2025-06-26"
+SYSTEM_PROMPT = "You are a helpful research assistant."
+TOOLS = [{"type": "web_search_preview"}]
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 

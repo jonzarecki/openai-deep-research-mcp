@@ -44,7 +44,7 @@ def test_bulk_tool(monkeypatch):
 
 
 def test_bulk_research(monkeypatch):
-    async def fake_run(q):
+    async def fake_run(*args, **kwargs):
         return "Deep result"
 
     monkeypatch.setattr(

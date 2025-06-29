@@ -44,7 +44,7 @@ def test_get_paper_summary(monkeypatch):
 
 
 def test_research_summary(monkeypatch):
-    async def fake_run(q):
+    async def fake_run(*args, **kwargs):
         return "Result about AI"
 
     monkeypatch.setattr("deep_research_mcp.server._run_deep_research", fake_run)
@@ -75,9 +75,13 @@ def test_run_deep_research_env(monkeypatch):
     )
 
     monkeypatch.setattr(server, "_client", fake_client)
-    monkeypatch.setattr(server, "DEEP_RESEARCH_MODEL", "test-model")
-    monkeypatch.setattr(server, "SYSTEM_PROMPT", "my prompt")
-    monkeypatch.setattr(server, "DEEP_RESEARCH_TOOLS", [{"type": "web_search_preview"}])
 
-    result = asyncio.run(_run_deep_research("hi"))
+    result = asyncio.run(
+        _run_deep_research(
+            "hi",
+            model="test-model",
+            system_prompt="my prompt",
+            tools=["web_search_preview"],
+        )
+    )
     assert result == "done"
