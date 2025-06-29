@@ -7,6 +7,11 @@ A Model Context Protocol (MCP) server exposing the OpenAI Deep Research API. It 
 pip install git+https://github.com/openai/deep-research-mcp
 ```
 
+### Quick Setup Outline
+1. Install the package using ``pip`` or ``npx``.
+2. Export the environment variables shown below (API key, vector store ID, etc.).
+3. Run ``deep-research-mcp`` to start the server or call the tools from Python.
+
 You can also run the server via `npx` without installing system wide:
 ```bash
 npx --yes github:openai/deep-research-mcp
@@ -20,11 +25,13 @@ pip install -e .
 ```
 
 ### Configuration
-Set your OpenAI credentials and vector store ID so the server can call the Deep Research API. You may also specify ``DEEP_RESEARCH_MODEL`` to override the default model:
+Set your OpenAI credentials and vector store ID so the server can call the Deep Research API. You may also specify `DEEP_RESEARCH_MODEL` to override the default model. `DEEP_RESEARCH_SYSTEM_PROMPT` customizes the system prompt and `DEEP_RESEARCH_TOOLS` controls which tools are sent to the API:
 ```bash
 export OPENAI_API_KEY=<your key>
 export VECTOR_STORE_ID=<vector store id>
 export DEEP_RESEARCH_MODEL=o4-mini-deep-research-2025-06-26  # optional
+export DEEP_RESEARCH_SYSTEM_PROMPT="You are an expert researcher"  # optional
+export DEEP_RESEARCH_TOOLS="web_search_preview,code_interpreter"   # optional
 ```
 
 The server uses the asynchronous OpenAI client under the hood. Ensure the above environment variables are defined before running.

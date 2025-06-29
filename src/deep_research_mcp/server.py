@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import List
+from typing import List, Dict
 
 from openai import AsyncOpenAI
 from fastmcp import FastMCP
@@ -15,6 +15,17 @@ VECTOR_STORE_ID = os.environ.get("VECTOR_STORE_ID", "")
 DEEP_RESEARCH_MODEL = os.environ.get(
     "DEEP_RESEARCH_MODEL", "o4-mini-deep-research-2025-06-26"
 )
+SYSTEM_PROMPT = os.environ.get(
+    "DEEP_RESEARCH_SYSTEM_PROMPT",
+    "You are an expert researcher providing thorough, citation-backed answers.",
+)
+_tool_names = os.environ.get("DEEP_RESEARCH_TOOLS", "web_search_preview").split(",")
+DEEP_RESEARCH_TOOLS: List[Dict] = []
+for name in [t.strip() for t in _tool_names if t.strip()]:
+    if name == "code_interpreter":
+        DEEP_RESEARCH_TOOLS.append({"type": "code_interpreter", "container": {"type": "auto", "file_ids": []}})
+    else:
+        DEEP_RESEARCH_TOOLS.append({"type": name})
 
 _client = AsyncOpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
@@ -56,9 +67,7 @@ async def _run_deep_research(question: str) -> str:
         input=[
             {
                 "role": "developer",
-                "content": [
-                    {"type": "input_text", "text": "You are a helpful researcher."}
-                ],
+                "content": [{"type": "input_text", "text": SYSTEM_PROMPT}],
             },
             {
                 "role": "user",
@@ -66,7 +75,8 @@ async def _run_deep_research(question: str) -> str:
             },
         ],
         reasoning={"summary": "auto"},
-        tools=[{"type": "web_search_preview"}],
+        tools=DEEP_RESEARCH_TOOLS,
+        background=True,
     )
     return resp.output[-1].content[0].text
 

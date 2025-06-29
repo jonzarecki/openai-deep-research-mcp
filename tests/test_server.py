@@ -11,6 +11,8 @@ from deep_research_mcp import (
     categories,
     suggest_reading,
 )
+from deep_research_mcp.server import _run_deep_research
+import deep_research_mcp.server as server
 
 
 
@@ -54,3 +56,28 @@ def test_resources_and_prompts():
     assert "general" in asyncio.run(categories.read())
     msg = asyncio.run(suggest_reading.render({"topic": "AI"}))
     assert "AI" in msg[0].content.text
+
+
+def test_run_deep_research_env(monkeypatch):
+    class FakeResp:
+        output = [type("O", (), {"content": [type("C", (), {"text": "done"})()]})]
+
+    async def fake_create(self, **kwargs):
+        assert kwargs["model"] == "test-model"
+        assert kwargs["input"][0]["content"][0]["text"] == "my prompt"
+        assert kwargs["tools"] == [{"type": "web_search_preview"}]
+        return FakeResp()
+
+    fake_client = type(
+        "Cli",
+        (),
+        {"responses": type("Resp", (), {"create": fake_create})()},
+    )
+
+    monkeypatch.setattr(server, "_client", fake_client)
+    monkeypatch.setattr(server, "DEEP_RESEARCH_MODEL", "test-model")
+    monkeypatch.setattr(server, "SYSTEM_PROMPT", "my prompt")
+    monkeypatch.setattr(server, "DEEP_RESEARCH_TOOLS", [{"type": "web_search_preview"}])
+
+    result = asyncio.run(_run_deep_research("hi"))
+    assert result == "done"
