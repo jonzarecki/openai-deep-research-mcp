@@ -4,7 +4,7 @@ A Model Context Protocol (MCP) server exposing the OpenAI Deep Research API. It 
 
 ## Installation
 ```bash
-pip install git+https://github.com/openai/deep-research-mcp
+pip install git+https://github.com/jonzarecki/openai-deep-research-mcp
 ```
 
 ### Quick Setup Outline
@@ -14,7 +14,7 @@ pip install git+https://github.com/openai/deep-research-mcp
 
 You can also run the server via `npx` without installing system wide:
 ```bash
-npx --yes github:openai/deep-research-mcp
+npx --yes github:jonzarecki/openai-deep-research-mcp
 ```
 
 Or clone this repository and install in editable mode:
@@ -51,7 +51,7 @@ To let your MCP client automatically install and run this server, add the follow
 {
   "mcpServers": {
     "deep-research-mcp": {
-      "command": "npx --yes github:openai/deep-research-mcp",
+      "command": "npx --yes github:jonzarecki/openai-deep-research-mcp",
       "env": {}
     }
   }

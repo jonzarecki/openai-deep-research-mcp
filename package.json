@@ -6,6 +6,6 @@
     "deep-research-mcp": "./index.js"
   },
   "scripts": {
-    "postinstall": "pip install git+https://github.com/openai/deep-research-mcp"
+  "postinstall": "pip install git+https://github.com/jonzarecki/openai-deep-research-mcp"
   }
 }
