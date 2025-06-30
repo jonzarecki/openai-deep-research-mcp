@@ -1,0 +1,11 @@
+{
+  "name": "deep-research-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "deep-research-mcp": "./index.js"
+  },
+  "scripts": {
+  "postinstall": "pip install git+https://github.com/jonzarecki/openai-deep-research-mcp"
+  }
+}
