@@ -3,10 +3,7 @@
 A few short examples using the tools provided by the server. Defaults can be set via environment variables, but you may override them per call.
 
 ```python
-from deep_research_mcp import search_papers, get_paper_summary, research_summary
-
-print(search_papers.fn("machine learning"))
-print(get_paper_summary.fn("file-123"))
+from deep_research_mcp import research_summary
 print(
     research_summary.fn(
         "impact of AI",

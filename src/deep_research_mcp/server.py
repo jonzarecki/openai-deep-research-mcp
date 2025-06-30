@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import List, Dict, Iterable, Optional
+from typing import Iterable, List, Dict, Optional
 
 from openai import AsyncOpenAI
 from fastmcp import FastMCP
@@ -11,7 +11,6 @@ from fastmcp.contrib.bulk_tool_caller import BulkToolCaller
 logger = logging.getLogger(__name__)
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-VECTOR_STORE_ID = os.environ.get("VECTOR_STORE_ID", "")
 
 DEFAULT_MODEL = os.environ.get("DEEP_RESEARCH_MODEL", "o4-mini-deep-research-2025-06-26")
 DEFAULT_SYSTEM_PROMPT = os.environ.get(
@@ -45,28 +44,6 @@ mcp = FastMCP("deep-research-mcp")
 
 _bulk_tools = BulkToolCaller()
 _bulk_tools.register_tools(mcp)
-
-
-async def _search_vector_store(query: str):
-    if not _client:
-        raise RuntimeError("OPENAI_API_KEY not configured")
-    resp = _client.vector_stores.search(vector_store_id=VECTOR_STORE_ID, query=query)
-    results = []
-    async for item in resp:
-        results.append(item)
-    return results
-
-
-async def _fetch_file(file_id: str) -> str:
-    if not _client:
-        raise RuntimeError("OPENAI_API_KEY not configured")
-    pager = _client.vector_stores.files.content(
-        vector_store_id=VECTOR_STORE_ID, file_id=file_id
-    )
-    parts = []
-    async for chunk in pager:
-        parts.append(getattr(chunk, "text", ""))
-    return "\n".join(parts)
 
 
 async def _run_deep_research(
@@ -104,28 +81,6 @@ async def _run_deep_research(
 
 
 @mcp.tool()
-async def search_papers(query: str) -> str:
-    """Search vector store for papers matching ``query``."""
-    items = await _search_vector_store(query)
-    if not items:
-        return "No papers found"
-    lines = [
-        f"{getattr(i, 'filename', 'Untitled')} ({getattr(i, 'file_id', '')})"
-        for i in items[:10]
-    ]
-    if len(items) > 10:
-        lines.append(f"...and {len(items) - 10} more results")
-    return "\n".join(lines)
-
-
-@mcp.tool()
-async def get_paper_summary(paper_id: str) -> str:
-    """Fetch the full text for ``paper_id`` and return a short snippet."""
-    text = await _fetch_file(paper_id)
-    return text[:500] if text else "No summary available"
-
-
-@mcp.tool()
 async def research_summary(
     question: str,
     system_prompt: Optional[str] | None = None,
@@ -138,21 +93,6 @@ async def research_summary(
         model=model,
         system_prompt=system_prompt,
         tools=tools,
-    )
-
-
-@mcp.resource("deepresearch://categories")
-async def categories() -> str:
-    """List research categories if available."""
-    return "general"
-
-
-@mcp.prompt()
-def suggest_reading(topic: str) -> str:
-    """Prompt text to suggest reading material."""
-    return (
-        f"Provide recommended research papers about {topic}. "
-        "Mention key authors and venues."
     )
 
 

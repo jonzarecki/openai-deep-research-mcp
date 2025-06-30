@@ -9,8 +9,9 @@ pip install git+https://github.com/jonzarecki/openai-deep-research-mcp
 
 ### Quick Setup Outline
 1. Install the package using ``pip`` or ``npx``.
-2. Export the environment variables shown below (API key, vector store ID, etc.).
-3. Run ``deep-research-mcp`` to start the server or call the tools from Python.
+2. Set ``OPENAI_API_KEY`` and any optional variables shown below.
+3. Add the server entry to your ``mcp.json`` so clients like Cursor can launch it automatically.
+4. Run ``deep-research-mcp`` to start the server or call the tool from Python.
 
 You can also run the server via `npx` without installing system wide:
 ```bash
@@ -25,10 +26,9 @@ pip install -e .
 ```
 
 ### Configuration
-Set your OpenAI credentials and vector store ID so the server can call the Deep Research API:
+Set your OpenAI credentials so the server can call the Deep Research API:
 ```bash
 export OPENAI_API_KEY=<your key>
-export VECTOR_STORE_ID=<vector store id>
 ```
 Optional environment variables `DEEP_RESEARCH_MODEL`, `DEEP_RESEARCH_SYSTEM_PROMPT` and `DEEP_RESEARCH_TOOLS` define defaults for the Deep Research call. You can override them when invoking the `research_summary` tool.
 
