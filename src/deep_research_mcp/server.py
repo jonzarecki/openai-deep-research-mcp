@@ -6,7 +6,6 @@ from typing import Iterable, List, Dict, Optional
 
 from openai import AsyncOpenAI
 from fastmcp import FastMCP
-from fastmcp.contrib.bulk_tool_caller import BulkToolCaller
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +40,6 @@ _client = AsyncOpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 
 mcp = FastMCP("deep-research-mcp")
-
-_bulk_tools = BulkToolCaller()
-_bulk_tools.register_tools(mcp)
 
 
 async def _run_deep_research(
