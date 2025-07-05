@@ -34,6 +34,17 @@ Optional environment variables `DEEP_RESEARCH_MODEL`, `DEEP_RESEARCH_SYSTEM_PROM
 
 The server uses the asynchronous OpenAI client under the hood. Ensure the above environment variables are defined before running.
 
+### Caching
+Results are automatically cached on disk so repeated queries don't consume extra
+API credits. You can configure caching behaviour with these optional variables:
+
+* `DEEP_RESEARCH_CACHE_PATH` – JSON file storing cached responses.
+* `DEEP_RESEARCH_OUTPUT_DIR` – directory where each research result is written.
+* `DEEP_RESEARCH_LOG_FILE` – log file path recording cache and API events.
+
+Use the `get_cached_research` tool to retrieve a cached result without making a
+new API call.
+
 ## Usage
 Run the server directly (stdout/stdin transport):
 ```bash
