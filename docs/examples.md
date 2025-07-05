@@ -3,7 +3,7 @@
 A few short examples using the tools provided by the server. Defaults can be set via environment variables, but you may override them per call.
 
 ```python
-from deep_research_mcp import research_summary
+from deep_research_mcp import research_summary, get_cached_research
 print(
     research_summary.fn(
         "impact of AI",
@@ -12,4 +12,7 @@ print(
         tools=["web_search_preview"],
     )
 )
+
+# later, retrieve the cached result without hitting the API
+print(get_cached_research.fn("impact of AI"))
 ```
